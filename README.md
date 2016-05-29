@@ -1,5 +1,5 @@
 # coap_examples
-Sample Python client and server using the CaAP protocol.
+Sample Python client and server using the CoAP protocol.
 
 # Install
 We use the txThings Python library from https://github.com/mwasilak/txThings.
