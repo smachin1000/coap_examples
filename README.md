@@ -1,5 +1,5 @@
 # coap_examples
-Sample code testing the COaP protocol.
+Sample Python client and server using the COaP protocol.
 
 #Install
 ~~~~~~~
