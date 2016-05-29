@@ -14,16 +14,16 @@ Sample successful output is:
     2016-05-29 14:37:12-0700 [-] Log opened.
     2016-05-29 14:37:12-0700 [-] Coap starting on 61616
     2016-05-29 14:37:12-0700 [-] Starting protocol <txthings.coap.Coap instance at 0
-x02E57A58>
+    x02E57A58>
     2016-05-29 14:37:13-0700 [-] Sending message to 192.168.1.100:5683
     2016-05-29 14:37:13-0700 [-] Message 'T\x01\x89\xa8\x00\x00\x0b\xec\xbbtemperatu
-re' sent successfully
+    re' sent successfully
     2016-05-29 14:37:13-0700 [-] Sending request - Token: 00000bec, Host: 192.168.1.
-100, Port: 5683
+    100, Port: 5683
     2016-05-29 14:37:13-0700 [Coap (UDP)] Received 'TEW\xf0\x00\x00\x0b\xec\xff36.3'
- from 192.168.1.100:5683
+     from 192.168.1.100:5683
     2016-05-29 14:37:13-0700 [Coap (UDP)] Incoming Message ID: 22512
     2016-05-29 14:37:13-0700 [Coap (UDP)] New unique CON or NON message received
     2016-05-29 14:37:13-0700 [Coap (UDP)] Received Response, token: 00000bec, host:
-192.168.1.100, port: 5683
+    192.168.1.100, port: 5683
     2016-05-29 14:37:13-0700 [-] CoAP result: 36.3
