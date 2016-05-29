@@ -1,13 +1,12 @@
 # coap_examples
 Sample Python client and server using the COaP protocol.
 
-#Install
-~~~~~~~
+# Install
 We use the txThings Python library from https://github.com/mwasilak/txThings.
 To install this library, git clone https://github.com/mwasilak/txThings.git then run python setup.py install.
 This code has been tested with version 3ad1e3aa493baaedf21b553513684919d82acd09 of the library.
 
-#Running
+# Running
 On one machine run the server with "python temperature_server.py".  On another, run the client to read from the server with "python temperature_client.py <ip_addr>" where ip_addr is the IP address of the server.
 
 Sample successful output is:
