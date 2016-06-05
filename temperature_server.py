@@ -21,6 +21,9 @@ class TempResource(resource.CoAPResource):
         resource.CoAPResource.__init__(self)
         self.addParam(resource.LinkParam("title", "Temperature resource"))
 
+        # Allow discovery of this resource
+        self.visible = True
+
     def render_GET(self, request):
         temp = self._get_temperature()
         response = coap.Message(code=coap.CONTENT, payload='%.1f' % temp)
@@ -39,9 +42,44 @@ class TempResource(resource.CoAPResource):
         """
         return float(os.popen("tshwctl --cputemp|grep external|cut -f2 -d'='").read().rstrip())
 
+class CoreResource(resource.CoAPResource):
+    """
+    Example Resource that provides list of links hosted by a server.
+    Normally it should be hosted at /.well-known/core
+
+    Resource should be initialized with "root" resource, which can be used
+    to generate the list of links.
+
+    For the response, an option "Content-Format" is set to value 40,
+    meaning "application/link-format". Without it most clients won't
+    be able to automatically interpret the link format.
+
+    Notice that self.visible is not set - that means that resource won't
+    be listed in the link format it hosts.
+    """
+
+    def __init__(self, root):
+        resource.CoAPResource.__init__(self)
+        self.root = root
+
+    def render_GET(self, request):
+        data = []
+        self.root.generateResourceList(data, "")
+        payload = ",".join(data)
+        print payload
+        response = coap.Message(code=coap.CONTENT, payload=payload)
+        response.opt.content_format = coap.media_types_rev['application/link-format']
+        return defer.succeed(response)
+
 if __name__ == '__main__':
     log.startLogging(sys.stdout)
     root = resource.CoAPResource()
+
+    well_known = resource.CoAPResource()
+    root.putChild('.well-known', well_known)
+    core = CoreResource(root)
+    well_known.putChild('core', core)
+    
     temperature_resouce = TempResource()
     root.putChild('temperature', temperature_resouce)
 
