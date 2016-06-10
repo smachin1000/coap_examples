@@ -9,7 +9,9 @@ from twisted.python import log
 import txthings.resource as resource
 import txthings.coap as coap
 
+import platform
 import os
+import random
 
 
 class TempResource(resource.CoAPResource):
@@ -40,8 +42,12 @@ class TempResource(resource.CoAPResource):
 
         this function returns the ambient temperature as a float.
         """
-        return float(os.popen("tshwctl --cputemp|grep external|cut -f2 -d'='").read().rstrip())
+        if platform.platform == 'xxxx':
+            return float(os.popen("tshwctl --cputemp|grep external|cut -f2 -d'='").read().rstrip())
+        else:
+            return 30 + random.random()
 
+# Next class is needed to allow discovery.
 class CoreResource(resource.CoAPResource):
     """
     Example Resource that provides list of links hosted by a server.
