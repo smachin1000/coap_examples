@@ -22,7 +22,10 @@ class TempResource(resource.CoAPResource):
 
     def __init__(self):
         resource.CoAPResource.__init__(self)
-        self.addParam(resource.LinkParam("title", "Temperature resource"))
+        self.addParam(resource.LinkParam('title', 'Temperature Resource'))
+
+        # Additional metadata about a resource can be added using the addParam call.
+        self.addParam(resource.LinkParam('units', 'degrees C'))
 
         # Allow discovery of this resource
         self.visible = True
@@ -106,3 +109,4 @@ if __name__ == '__main__':
 
     # Run Twister'd event loop
     reactor.run()
+
