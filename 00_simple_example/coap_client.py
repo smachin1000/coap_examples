@@ -1,7 +1,5 @@
 import sys
 
-from twisted.internet.defer import Deferred
-from twisted.internet.protocol import DatagramProtocol
 from twisted.internet import reactor
 from twisted.python import log
 
@@ -10,7 +8,8 @@ import txthings.resource as resource
 
 from ipaddress import ip_address
 
-class CoapClient():
+
+class CoapClient:
     """
     Sample general purpose CoAP client that performs a GET to the specified IP address and path.
 
@@ -38,7 +37,8 @@ class CoapClient():
         d.addCallback(self.printResponse)
         d.addErrback(self.noResponse)
 
-    def printResponse(self, response):
+    @staticmethod
+    def printResponse(response):
         print 'CoAP result: ' + response.payload
 
     def noResponse(self, failure):

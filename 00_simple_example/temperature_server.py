@@ -19,20 +19,22 @@ class TempResource(resource.CoAPResource):
     this example.
     """
 
-    def __init__(self, start=0):
+    def __init__(self):
         resource.CoAPResource.__init__(self)
         self.addParam(resource.LinkParam("title", "Temperature resource"))
 
         # Disable 01_discovery for now, we'll cover that next
         # self.visible = True
 
+    # noinspection PyUnusedLocal
     def render_GET(self, request):
         temp = self._get_temperature()
         response = coap.Message(code=coap.CONTENT, payload='%.1f' % temp)
 
         return defer.succeed(response)
 
-    def _get_temperature(self):
+    @staticmethod
+    def _get_temperature():
         """
         Temperature is obtained via the embedded board's tshwctl utility, it outputs both
         CPU & ambient temperature in this format:

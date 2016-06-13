@@ -1,8 +1,6 @@
 import sys
-import datetime
 
 from twisted.internet import defer
-from twisted.internet.protocol import DatagramProtocol
 from twisted.internet import reactor
 from twisted.python import log
 
@@ -17,22 +15,27 @@ import random
 class TempResource(resource.CoAPResource):
     """
     Example CoAP server to return the current ambient temperature.
+
+    This will the real value from the temperature sensor when running on the embedded board,
+    otherwise a simulated value in degrees C.
     """
 
-    def __init__(self, start=0):
+    def __init__(self):
         resource.CoAPResource.__init__(self)
         self.addParam(resource.LinkParam("title", "Temperature resource"))
 
-        # Allow 01_discovery of this resource
+        # Allow discovery of this resource
         self.visible = True
 
+    # noinspection PyUnusedLocal
     def render_GET(self, request):
         temp = self._get_temperature()
         response = coap.Message(code=coap.CONTENT, payload='%.1f' % temp)
 
         return defer.succeed(response)
 
-    def _get_temperature(self):
+    @staticmethod
+    def _get_temperature():
         """
         Temperature is obtained via the embedded board's tshwctl utility, it outputs both
         CPU & ambient temperature in this format:
@@ -42,12 +45,15 @@ class TempResource(resource.CoAPResource):
 
         this function returns the ambient temperature as a float.
         """
-        if platform.platform == 'xxxx':
+        # If running on real hardware, read from onboard temperature sensor
+        # otherwise return a simulated value.
+        if platform.machine() == 'armv5tejl':
             return float(os.popen("tshwctl --cputemp|grep external|cut -f2 -d'='").read().rstrip())
         else:
-            return 30 + random.random()
+            return 30 + random.uniform(0, 5)
 
-# Next class is needed to allow 01_discovery.
+
+# Next class is needed to allow resource discovery.
 class CoreResource(resource.CoAPResource):
     """
     Example Resource that provides list of links hosted by a server.
@@ -62,12 +68,16 @@ class CoreResource(resource.CoAPResource):
 
     Notice that self.visible is not set - that means that resource won't
     be listed in the link format it hosts.
-    """
 
+    An example of how to discover the properties on a server using a CoAP client would be:
+
+    python coap_client.py 192.168.1.100 .well-known/core
+    """
     def __init__(self, root):
         resource.CoAPResource.__init__(self)
         self.root = root
 
+    # noinspection PyUnusedLocal
     def render_GET(self, request):
         data = []
         self.root.generateResourceList(data, "")
